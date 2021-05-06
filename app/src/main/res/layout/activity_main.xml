@@ -17,28 +17,10 @@
           android:layout_height="56dp"
           android:background="?attr/colorPrimary"
           android:minHeight="?attr/actionBarSize"
+          app:titleTextColor="@color/orange"
           app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-          android:theme="@style/ThemeOverlay.AppCompat.Light">
+          android:theme="@style/ThemeOverlay.AppCompat.Light"/>
 
-         <ImageView
-             app:srcCompat="@drawable/ic_logo"
-             android:id="@+id/paymentMethodImageView"
-             android:layout_width="30dp"
-             android:layout_height="30dp"/>
-
-         <TextView
-             android:text="HomeWork"
-             android:layout_marginStart="30dp"
-             android:layout_marginLeft="30dp"
-             android:layout_gravity="center"
-             android:textSize="24sp"
-             android:textStyle="bold"
-             android:id="@+id/paymentMethodTextView"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textColor="@color/orange"/>
-
-      </androidx.appcompat.widget.Toolbar>
    </com.google.android.material.appbar.AppBarLayout>
 
    <androidx.core.widget.NestedScrollView

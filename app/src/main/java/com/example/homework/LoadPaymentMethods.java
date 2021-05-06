@@ -52,43 +52,7 @@ public class LoadPaymentMethods {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            HttpURLConnection urlConnection = null;
-            try {
-                String address = Constants.URL;
-                URL url = new URL(address);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.connect();
-
-                int status = urlConnection.getResponseCode();
-                Log.d("response code", status + "");
-                if(status == 200) {
-                    InputStream in = urlConnection.getInputStream();
-                    String data = new String(ByteStreams.toByteArray(in));
-                    byte[] buffer = new byte[1024];
-                    int len = 0;
-                    while ((len = in.read(buffer)) != -1) {
-                        String curr = new String(buffer, "UTF-8");
-                        data += curr;
-                    }
-                    JSONObject jsonObject = new JSONObject(data);
-                    parseJsonToObject(jsonObject);
-                } else {
-                    Log.e( "url_connection_error", urlConnection.getErrorStream() +"");
-                }
-
-            } catch (JSONException jsonException) {
-                Log.e(TAG, "JSON ERROR", jsonException);
-            } catch (IOException ioException) {
-                Log.e(TAG, "IOException ERROR", ioException);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
+            getPaymentMethods();
 
             return null;
         }
@@ -109,12 +73,65 @@ public class LoadPaymentMethods {
             return mApplicableNetworks;
         }
 
+        /**
+         *Get payment methods using a GET request*/
+        private void getPaymentMethods() {
+            HttpURLConnection urlConnection = null;
+            try {
+                String address = Constants.URL;
+                URL url = new URL(address);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.connect();
+
+                int status = urlConnection.getResponseCode();
+                Log.d("response code", status + "");
+                if(status == 200) {
+                    InputStream in = urlConnection.getInputStream();
+                    String data = new String(ByteStreams.toByteArray(in));
+                    byte[] buffer = new byte[1024];
+                    while (in.read(buffer) != -1) {
+                        String curr = new String(buffer, "UTF-8");
+                        data += curr;
+                    }
+                    JSONObject jsonObject = new JSONObject(data);
+                    parseJsonToObject(jsonObject);
+                } else {
+                    Log.e( "url_connection_error", urlConnection.getErrorStream() +"");
+                    InputStream error = urlConnection.getErrorStream();
+                    String error_data = new String(ByteStreams.toByteArray(error));
+                    byte[] buffer = new byte[1024];
+                    while (error.read(buffer) != -1) {
+                        String curr = new String(buffer, "UTF-8");
+                        error_data += curr;
+                    }
+                    Log.e("url_connection_error =>", " " + error_data);
+                    JSONObject jo = new JSONObject(error_data);
+                    Log.e("url_connection_error =>", " " + jo.toString());
+                }
+
+            } catch (JSONException jsonException) {
+                Log.e(TAG, "JSON ERROR", jsonException);
+            } catch (IOException ioException) {
+                Log.e(TAG, "IOException ERROR", ioException);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+        }
+
     }
 
     public static LoadListener setLoadListener(LoadListener loadListener) {
         return loadListener;
     }
 
+    /**
+     *Convert the JSONObject response into ApplicableNetwork objects*/
     private static void parseJsonToObject(JSONObject json) {
         try {
             String networksString = json.getString("networks");

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.homework.adapters.PaymentMethodsAdapter;
 import com.example.homework.interfaces.LoadListener;
@@ -27,13 +28,25 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // find view by id
         mPaymentMethodsRecyclerView = findViewById(R.id.paymentRecyclerView);
         mToolbar = findViewById(R.id.toolbar);
+
+        //support action bar
         setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_36dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setTitle(R.string.payment_methods);
         }
 
+        // initialise load payments listener
         mLoadListener = LoadPaymentMethods.setLoadListener(new LoadListener() {
             @Override
             public void load(List<ApplicableNetwork> applicableNetworks) {
@@ -48,13 +61,14 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onStart() {
         super.onStart();
+        // initialise load payments methods async task
         new LoadPaymentMethods.LoadPaymentMethodsTask(this).execute();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -72,6 +86,8 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    /**
+     * populate the recycler view with payments methods*/
     private void inflateRecyclerView() {
         mPaymentMethodsAdapter = new PaymentMethodsAdapter(this, mApplicableNetworks);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
