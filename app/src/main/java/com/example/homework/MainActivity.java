@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     /**
-     * populate the recycler view with payments methods*/
+     * populate the recycler view with payments methods
+     * */
     private void inflateRecyclerView() {
         mPaymentMethodsAdapter = new PaymentMethodsAdapter(this, mApplicableNetworks);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
