@@ -30,12 +30,11 @@ import static org.junit.Assert.assertTrue;
 public class PaymentMethodsAdapterTest {
     private Context mContext = null;
     private List<ApplicableNetwork> mApplicableNetworks;
+    private LoadListener mLoadListener;
 
     @Before
     public void setUp() {
-        Application application = RuntimeEnvironment.application;
-        assertNotNull(application);
-        mContext = App.getAppContext();
+        mContext = App.mContext;
     }
 
     @Test
@@ -50,6 +49,15 @@ public class PaymentMethodsAdapterTest {
         LinearLayout parent = new LinearLayout(mContext);
         RecyclerView.ViewHolder methodViewHolder = methodsAdapter.onCreateViewHolder(parent, 0);
         assertTrue(methodViewHolder instanceof PaymentMethodViewHolder);
+    }
+
+    @Test
+    public void test_LoadListener() {
+        mLoadListener = LoadPaymentMethods.setLoadListener(new LoadListener() {
+            @Override
+            public void load(List<ApplicableNetwork> applicableNetworks) {}
+        });
+        assertNotNull(mLoadListener);
     }
 
     @Test
