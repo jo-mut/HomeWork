@@ -1,6 +1,7 @@
 package com.example.homework.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,18 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodViewHolder> {
+public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodViewHolder> {
     private Context mContext;
     private List<ApplicableNetwork> mApplicableNetworks = new ArrayList<>();
 
-    public PaymentMethodAdapter(Context mContext, List<ApplicableNetwork> mApplicableNetworks) {
+    public PaymentMethodsAdapter(Context mContext, List<ApplicableNetwork> mApplicableNetworks) {
         this.mContext = mContext;
         this.mApplicableNetworks = mApplicableNetworks;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     @NonNull
@@ -40,10 +46,14 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodView
             String paymentLogo = network.getLinks().get("logo") + "";
             String paymentName = network.getLabel();
 
-            holder.mPaymentMethodNameTextView.setText(paymentName);
-            Picasso.get()
-                    .load(paymentLogo)
-                    .into(holder.mPaymentMethodImageView);
+            if (!paymentName.equals("")) {
+                holder.mPaymentMethodNameTextView.setText(paymentName);
+            }
+            if (!paymentLogo.equals("")) {
+                Picasso.get()
+                        .load(paymentLogo)
+                        .into(holder.mPaymentMethodImageView);
+            }
         }
     }
 

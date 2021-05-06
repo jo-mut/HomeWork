@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        android:elevation="1dp"
         app:contentPadding="10dp"
         app:cardCornerRadius="15dp"
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_weight="80"
                 android:layout_gravity="center"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:id="@+id/paymentMethodTextView"
                 android:layout_width="match_parent"
